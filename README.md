@@ -2,6 +2,7 @@
 # Homework
 Complete each homework as specified by the comments in each file, then upload your completed file to our [training website](https://rbrevrt.hkust.edu.hk). I will grade your work and give feedback. You get unlimited attempts before the deadline, so you are suggested to submit early and keep correcting your code.
 If you have any questions, regarding the homework, the duties of the Software team, Software tutorial contents, etc, tag and ask me (@Planeson) in the group.
+You can also find me in private if you need to be late for a homework submission, be missing from a tutorial, some advice for anything, or just yap in general.
 
 ## Testing your code
 You can test your code locally or on the cloud. For those that need COMP2011, I suggest giving VSCode a try, else OnlineGDB is the hassle-free and quick method.
