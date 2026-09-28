@@ -1,6 +1,6 @@
 # Red Bird Racing Training Materials
 # Homework
-Complete each homework as specified by the comments in each file, then upload your completed file to our [training website](https://rbrevrt.hkust.edu.hk). I will grade your work and give feedback. You get unlimited attempts before the deadline, so you are suggested to submit early and keep correcting your code.
+Complete each homework as specified by the comments in each file, then upload your completed file to our [training website](https://rbrevrt.hkust.edu.hk/training). I will grade your work and give feedback. You get unlimited attempts before the deadline, so you are suggested to submit early and keep correcting your code.
 If you have any questions, regarding the homework, the duties of the Software team, Software tutorial contents, etc, tag and ask me (@Planeson) in the group.
 You can also find me in private if you need to be late for a homework submission, be missing from a tutorial, some advice for anything, or just yap in general.
 
