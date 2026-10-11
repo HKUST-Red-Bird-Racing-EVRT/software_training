@@ -2,7 +2,7 @@
  * @file main.cpp
  * @author Planeson (carson.cpk@proton.me)
  * @brief Test and verify the AMS Slave board.
- * @version 1.0
+ * @version 1.1.1
  * @date 2026-10-05
  *
  * @copyright Copyright (c) 2026 Red Bird Racing

@@ -133,14 +133,12 @@ You should see `main.cpp` show up under `Merge Changes` with a `!` next to it. C
 The Merge Editor shows `Incoming` (from `main`) on the left, `Current` (from `slow-blink`) on the right, and `Result` at the bottom. Note that `can_id` is already `0x456` in the result. Only `main` changed that line, so Git merged it by itself.
 ![merge editor](assets/t5_5.png)
 
-The top right of `Result` should say `2 Conflicts Remaining`, both in `loop()`. Press `Accept Current` above each of them on the right side to keep the changes from `slow-blink`. It should now say `0 Conflicts Remaining`, and the `loop()` in the result should use `delay(500)`.
+The top right of `Result` should say `3 Conflicts Remaining`, 1 in the file description, 2 in `loop()`. Press `Accept Incoming` on the left, above the version number change, and press `Accept Current` right side for the code changes in `loop()` to keep the changes from `slow-blink`. It should now say `0 Conflicts Remaining`, the version number should be `1.2.0`, and the `loop()` in the result should use `delay(500)`.
 
 Press the blue `Complete Merge` button in the bottom right. Go back to Source Control. The commit message is already filled in as `Merge branch 'main' into slow-blink`, leave it as is. Press the blue `Continue` button, then press the `Sync Changes` button to push the commit up.
 
 Go back to GitHub and refresh the Pull Request. You should see `No conflicts with base branch`. Press the green `Merge pull request` button, then the green `Confirm merge` button. Press `Delete branch` after it is merged, as the branch is no longer needed.
 ![merge pull request](assets/t5_6.png)
-
-Note: merging Pull Requests is done from the GitHub website, so this does not count as a commit via the GitHub website.
 
 Go back to VSCode. Switch back to `main`, then press the refresh button to pull the merged commits down.
 
@@ -177,11 +175,16 @@ Go back to VSCode. Switch back to `main`, then press the refresh button to pull 
 
 ### Task 7: Give answers to questions in `answers.md`
 Make sure you are on `main`. Create a new file called `answers.md` in the root of your repo, then answer the following questions in it. A few sentences for each question is enough.
-1. What is the difference between fetching and pulling?
-2. In Task 4, Git created a new commit called `Merge branch 'can'`. Why was a new commit needed?
-3. In Task 5, both branches changed `src/main.cpp`. Why did `can_id` merge by itself but `loop()` did not?
-4. In Task 6, which workflow ran when you pushed to `ci`, and which did not? Why?
-5. Why is `.pio` in `.gitignore`?
+1. What is the difference between a working directory, the staging area, a commit, and a remote repository?
+2. What do `HEAD`, `main`, and `origin` refer to in a normal repository?
+3. Why should you pull or fetch recent `main` changes before starting new work?
+4. What is the difference between fetching and pulling?
+5. What is the difference between merging and rebasing? When is rebasing a shared branch dangerous?
+6. Why are pull requests useful even though they are not part of Git itself?
+7. In Task 4, Git created a new commit called `Merge branch 'can'`. Why was a new commit needed?
+8. In Task 5, both branches changed `src/main.cpp`. Why did `can_id` merge by itself but `@version` and `loop()` did not?
+9. In Task 6, which workflow ran when you pushed to `ci`, and which did not? Why? What does the CI workflow protect the team from?
+10. What does a .gitignore file do, and why does it not remove a file that was already committed? Why is `.pio` in `.gitignore`?
 
 Stage the file. The commit message should be `Add answers.md`. Commit your changes, then press the `Sync Changes` button to push the commit up.
 
