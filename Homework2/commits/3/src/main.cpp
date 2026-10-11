@@ -32,7 +32,10 @@ void setup()
 
 void loop()
 {
-    can.sendMessage(&frame);
+    while (1)
+    {
+        can.sendMessage(&frame);
+    }
     // blink the LED
     digitalWrite(PIN_PD5, LOW);
     delay(500);
