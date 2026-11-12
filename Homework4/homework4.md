@@ -134,40 +134,44 @@ The pin header turns those labels into names the code can use. For example, `PD0
 ```
 When you write a `board.h` for a new board, you read the schematic like this and write one `#define` per pin you use.
 
-Copy [`4.2/include/board.h`](4.2/include/board.h) into the `include/` folder of your project. Read it. It defines:
+Copy the skeleton [`4.2/include/board.h`](4.2/include/board.h) into the `include/` folder of your project, then fill in the todos. Your `board.h` must define:
 
-| Name | Pin | Use |
+| Name | Value | Use |
 |---|---|---|
-| `LED_BUILTIN` | `PIN_PB5` | LED, output |
 | `BUTTON_1` | `PIN_PD1` | button, input |
 | `BUTTON_2` | `PIN_PD2` | button, input |
 | `BUTTON_3` | `PIN_PD3` | button, input |
 | `BUTTON_MODE` | `INPUT_PULLUP` | pin mode for the buttons |
 | `BUTTON_ACTIVE` | `LOW` | what `digitalRead()` returns when a button is pressed |
 
-Some things to notice:
+Do **not** define `LED_BUILTIN`. The board package already defines it as `PB5`, and defining it again gives you a redefinition warning. Keep using it as is.
+
+Some things to know:
+- A pin name is one line: `#define NAME VALUE`. Look at the VCU example above.
 - `PIN_PD1` means port D, bit 1 of the chip. These names come from the board package, so you never need to look up Arduino pin numbers.
 - PlatformIO adds `include/` to the include path, so `#include "board.h"` just works from `src/main.cpp`.
 - The buttons connect the pin to GND when pressed, and `INPUT_PULLUP` holds the pin `HIGH` otherwise. So pressed reads `LOW`. This is why `BUTTON_ACTIVE` exists: if the next board flips the wiring, you change one line.
-- `#ifndef BOARD_H` / `#define BOARD_H` / `#endif` is an include guard. It stops the file from being pasted in twice if 2 files include it.
+- An include guard stops the file from being pasted in twice if 2 files include it. Look up `#ifndef` / `#define` / `#endif`.
 
-Add `#include "board.h"` to the top of `src/main.cpp`. Build again, it should still pass. Commit with the message `Add board.h`.
+Add `#include "board.h"` to the top of `src/main.cpp`. Build again, it should still pass with no warnings. Commit with the message `Add board.h`.
 
 ### Task 4: Buttons
-Change your program so the buttons control the blink speed:
-- Press `BUTTON_1`: blink every 100 ms.
-- Press `BUTTON_2`: blink every 500 ms.
-- Press `BUTTON_3`: blink every 1000 ms.
+Your blink from Task 2 has a cycle time of 1000 ms (on + off) and a duty rate of 50% (on for half the cycle). Change your program so the buttons control them:
+1. Press `BUTTON_1`: add 100 ms to the cycle time.
+2. Press `BUTTON_2`: deduct 100 ms from the cycle time. Never go below 100 ms.
+3. Press `BUTTON_3`: duty rate = (duty rate + 25%) mod 100%. It starts at 50%, so pressing it goes 50% → 75% → 0% → 25% → 50%. At 0% the LED stays off.
 
-The LED keeps the last speed chosen after the button is released. Start at 500 ms.
+For example, at a cycle time of 800 ms and a duty rate of 25%, the LED is on for 200 ms, then off for 600 ms.
+
+Each press counts once. Holding a button down must not keep changing the value. To do this, remember what the button read on the last `loop()`, and only act when it changes from not pressed to pressed.
 
 You need 2 more functions:
 - `pinMode(pin, BUTTON_MODE);` sets a button pin as an input.
 - `digitalRead(pin)` returns `HIGH` or `LOW`. Compare it to `BUTTON_ACTIVE`.
 
-Only use the names from `board.h`. If `PIN_P` or a pin number appears in `main.cpp`, you are doing it wrong. Build with no warnings. Commit with the message `Control blink speed with buttons`, then push.
+With `delay()`, the board ignores the buttons while it waits, so presses get missed. Replace `delay()` with `millis()`, which returns the milliseconds since power on. Check the buttons on every `loop()`, and use `millis()` to decide whether the LED should be on or off right now.
 
-Bonus: with `delay()`, the board ignores the buttons while it waits, so a short press can be missed at 1000 ms. Look up `millis()` and rewrite the blink so the buttons are read on every `loop()`.
+Only use the names from `board.h`. If `PIN_P` or a pin number appears in `main.cpp`, you are doing it wrong. Build with no warnings. Commit with the message `Control blink with buttons`, then push.
 
 ### Task 5: CI/CD
 Add the same workflows as [Homework 2 Task 6](../Homework2/homework2.md#task-6-cicd), so GitHub builds your code on every push and publishes the documentation.
@@ -192,7 +196,8 @@ Commit with the message `Add CI/CD workflows`, then push. Go to the `Actions` ta
 - [ ] Read the entire instructions file
 - [ ] 4.1: `q1.cpp` parts b, c, d and part 2 answered, code fixed
 - [ ] 4.1: `q2.cpp` 3 warnings explained, code compiles with no warnings
-- [ ] 4.2: project builds with no warnings
+- [ ] 4.2: `board.h` written, project builds with no warnings
+- [ ] 4.2: the 3 buttons change cycle time and duty rate, once per press
 - [ ] 4.2: `main.cpp` only uses pin names from `board.h`
 - [ ] 4.2: `PlatformIO CI` passes on GitHub, and the GitHub Pages site is live
 - [ ] Commits for each task, pushed to GitHub

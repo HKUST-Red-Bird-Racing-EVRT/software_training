@@ -66,7 +66,7 @@ Make a PlatformIO project like in Homework 4.2, put `q1.cpp` in `src/`, and add 
 ```ini
 lib_deps = autowp/autowp-mcp2515@^1.3.1
 ```
-It should build with no warnings. Come find me if you want to test it on a real board and CAN bus.
+It should build with no warnings.
 
 ## Q2: CAN `.dbc` file
 ### Introduction
