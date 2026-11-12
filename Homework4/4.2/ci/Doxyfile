@@ -1,0 +1,4 @@
+PROJECT_NAME = "rbr-sf-hw-4"
+INPUT = RBR-Blinky/include RBR-Blinky/src
+OUTPUT_DIRECTORY = docs
+GENERATE_LATEX = NO

@@ -9,10 +9,14 @@ Create a repo called `rbr-sf-hw-4`, finish both parts in it, then send the link 
 Your repo should look like this when you are done:
 ```
 rbr-sf-hw-4/
+├── .github/workflows/
+│   ├── doxygen-gh-pages.yml
+│   └── pio_run.yml
+├── Doxyfile
 ├── 4.1/
 │   ├── q1.cpp
 │   └── q2.cpp
-└── 4.2/            <- your PlatformIO project
+└── RBR-Blinky/     <- your PlatformIO project (4.2)
     ├── platformio.ini
     ├── include/board.h
     └── src/main.cpp
@@ -57,7 +61,7 @@ Write your answers in the comment at the bottom of `q2.cpp`. After fixing all 3,
 From now on, always compile with warnings on. In 4.2, PlatformIO shows them to you in the Problems tab.
 
 ## 4.2 Blinky
-Blinking an LED is the "Hello World" of embedded systems. If the LED blinks, your toolchain, board and upload all work.
+Blinking an LED is the "Hello World" of embedded systems. If the LED blinks, your toolchain, board and flashing all work.
 
 The board in 4.2 is imaginary: an ATmega328P with an LED on PB5 and 3 buttons on PD1 to PD3. You will not flash anything. A clean `Build` (no errors, no warnings) is what we grade.
 
@@ -111,7 +115,7 @@ Replace the example in `src/main.cpp` with a program that turns the LED on for 5
 - `digitalWrite(pin, HIGH);` / `digitalWrite(pin, LOW);` turns it on / off.
 - `delay(ms);` waits for `ms` milliseconds.
 
-Use `LED_BUILTIN` as the pin. Press the tick `✓` in the bottom bar (`Build`). It should end with `SUCCESS` and no warnings. On a real board, you would then press `→` (`Upload`) to flash it.
+Use `LED_BUILTIN` as the pin. Press the tick `✓` in the bottom bar (`Build`). It should end with `SUCCESS` and no warnings. On a real board, we don't use the `→` (`Upload`) button. We build, then flash the compiled `.pio/build/ATmega328P/firmware.hex` onto the chip with `progisp.exe`.
 
 Commit with the message `Blink LED`.
 
@@ -165,6 +169,19 @@ Only use the names from `board.h`. If `PIN_P` or a pin number appears in `main.c
 
 Bonus: with `delay()`, the board ignores the buttons while it waits, so a short press can be missed at 1000 ms. Look up `millis()` and rewrite the blink so the buttons are read on every `loop()`.
 
+### Task 5: CI/CD
+Add the same workflows as [Homework 2 Task 6](../Homework2/homework2.md#task-6-cicd), so GitHub builds your code on every push and publishes the documentation.
+
+Copy everything inside [`4.2/ci`](4.2/ci) into the **root** of your repo, not into `RBR-Blinky/`. GitHub only looks for workflows in `.github/workflows` at the root. Your repo should now have `Doxyfile` and `.github/workflows` with 2 files inside, next to `4.1/` and `RBR-Blinky/`.
+
+The files are almost the same as Homework 2. Your PlatformIO project is in `RBR-Blinky/` this time, not the root, so the paths changed:
+- `pio_run.yml` runs `pio run -d RBR-Blinky`. `-d` tells PlatformIO which folder the project is in.
+- `Doxyfile` reads `INPUT = RBR-Blinky/include RBR-Blinky/src`, so the documentation is generated from your `board.h` and `main.cpp`.
+
+Doxygen only documents files with a `@file` comment at the top. `board.h` already has one. Add one to `src/main.cpp` too, in the same style.
+
+Commit with the message `Add CI/CD workflows`, then push. Go to the `Actions` tab and check that `PlatformIO CI` has a green tick. Set up GitHub Pages like in Homework 2, and check that your site shows `board.h` and `main.cpp`.
+
 ## Hints
 - Read the instructions carefully, they are meant to help you, not distract you.
 - Compile and test your code. Read the warnings, they are free bug reports.
@@ -177,5 +194,6 @@ Bonus: with `delay()`, the board ignores the buttons while it waits, so a short 
 - [ ] 4.1: `q2.cpp` 3 warnings explained, code compiles with no warnings
 - [ ] 4.2: project builds with no warnings
 - [ ] 4.2: `main.cpp` only uses pin names from `board.h`
+- [ ] 4.2: `PlatformIO CI` passes on GitHub, and the GitHub Pages site is live
 - [ ] Commits for each task, pushed to GitHub
 - [ ] Link to repo sent on the [training website](https://rbrevrt.hkust.edu.hk/training)
