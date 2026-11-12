@@ -1,8 +1,8 @@
 # Homework 4: Debugging and your first PlatformIO project
 ## Introduction
 This homework has 2 parts.
-- **4.1 Debugging**: read code, find the bugs, and learn to use compiler warnings to find them faster.
-- **4.2 Blinky**: create a PlatformIO project, blink an LED the Arduino way, then read buttons using a `board.h` pin file.
+- 4.1 Debugging: find the bugs in some code, and use compiler warnings to help you.
+- 4.2 Blinky: make a PlatformIO project, blink an LED, then read buttons using a `board.h` pin file.
 
 Create a repo called `rbr-sf-hw-4`, finish both parts in it, then send the link on the [training website](https://rbrevrt.hkust.edu.hk/training). Use what you learnt in [Homework 2](../Homework2/homework2.md): commit as you go, I ***WILL*** check your commit history :D.
 
@@ -28,9 +28,9 @@ Copy [`4.1/q1.cpp`](4.1/q1.cpp) and [`4.1/q2.cpp`](4.1/q2.cpp) into your repo. A
 ### q1.cpp
 #### Part 1
 For each of parts b, c and d, state the kind of error the code produces:
-- **Compilation error**: the compiler refuses to build it.
-- **Runtime error**: it builds, but crashes or misbehaves while running.
-- **Logic error**: it builds and runs, but gives the wrong result.
+- Compilation error: it does not compile.
+- Runtime error: it compiles, but crashes or misbehaves while running.
+- Logic error: it runs, but the result is wrong.
 
 Then explain why in no less than 10 words. Each part contains exactly one error. Part a is done for you as an example. You only need to know that `char inp[8]` holds 8 characters to see why it is an error.
 
@@ -42,7 +42,7 @@ The code at the bottom of `q1.cpp` is meant to print `75%`. It does not.
 4. Fix it in the code, so it prints `75%`.
 
 ### q2.cpp
-`q2.cpp` compiles, but does not do what the comment at the top says it should. The compiler already knows why. Turn on warnings and compile it:
+`q2.cpp` compiles, but does not do what the comment at the top says it should. Compile it with warnings on:
 ```
 g++ -Wall -Wextra -Wshadow q2.cpp -o q2
 ```
@@ -61,7 +61,7 @@ Write your answers in the comment at the bottom of `q2.cpp`. After fixing all 3,
 From now on, always compile with warnings on. In 4.2, PlatformIO shows them to you in the Problems tab.
 
 ## 4.2 Blinky
-Blinking an LED is the "Hello World" of embedded systems. If the LED blinks, your toolchain, board and flashing all work.
+Blinky is the first program you write on a new board. If the LED blinks, everything from compiling to flashing works.
 
 The board in 4.2 is imaginary: an ATmega328P with an LED on PB5 and 3 buttons on PD1 to PD3. You will not flash anything. A clean `Build` (no errors, no warnings) is what we grade.
 
@@ -120,9 +120,7 @@ Use `LED_BUILTIN` as the pin. Press the tick `✓` in the bottom bar (`Build`). 
 Commit with the message `Blink LED`.
 
 ### Task 3: `board.h`
-Look at your code. The LED pin is written inside `main.cpp`. Imagine a real program using 20 pins across 10 files, then the electrical team moves 3 of them on the next board. You would have to find every single one.
-
-Instead, we name every pin once, in one header file. The code only uses the names. Changing boards means changing one file. Our real boards do this, e.g. `BoardConfig.h` in the [VCU repo](https://github.com/HKUST-Red-Bird-Racing-EVRT/vehicle_control_unit).
+Right now the LED pin is written inside `main.cpp`. In a real project, pins are used all over the code, and the electrical team moves some of them on every new board version. So we give every pin a name in one header file, and the code only uses the names. When the board changes, only that file changes. Our real boards do this, e.g. `BoardConfig.h` in the [VCU repo](https://github.com/HKUST-Red-Bird-Racing-EVRT/vehicle_control_unit).
 
 This is part of a VCU schematic. Each MCU pin has a net label saying what it is connected to.
 ![VCU board schematic sample](assets/VCU_Board_sample.png)
@@ -146,7 +144,7 @@ Copy the skeleton [`4.2/include/board.h`](4.2/include/board.h) into the `include
 
 Do **not** define `LED_BUILTIN`. The board package already defines it as `PB5`, and defining it again gives you a redefinition warning. Keep using it as is.
 
-Some things to know:
+Notes:
 - A pin name is one line: `#define NAME VALUE`. Look at the VCU example above.
 - `PIN_PD1` means port D, bit 1 of the chip. These names come from the board package, so you never need to look up Arduino pin numbers.
 - PlatformIO adds `include/` to the include path, so `#include "board.h"` just works from `src/main.cpp`.
@@ -188,7 +186,7 @@ Commit with the message `Add CI/CD workflows`, then push. Go to the `Actions` ta
 
 ## Hints
 - Read the instructions carefully, they are meant to help you, not distract you.
-- Compile and test your code. Read the warnings, they are free bug reports.
+- Compile and test your code, and fix the warnings.
 - Avoid using AI tools directly, since it is eliminating thinking from your working process. You can use it to help you think, but don't ask it to solve the questions for you.
 - The board is imaginary, so a passing `Build` is enough. Read your code carefully, since you can't watch the LED to check it.
 

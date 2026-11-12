@@ -70,7 +70,7 @@ It should build with no warnings.
 
 ## Q2: CAN `.dbc` file
 ### Introduction
-A CAN frame is just an ID and up to 8 bytes. A `.dbc` file describes what those bytes mean: which ID is which message, and which bits form which signal. Every CAN tool can load it, so the whole team reads the bus the same way.
+A CAN frame is just an ID and up to 8 bytes. A `.dbc` file describes what those bytes mean: which ID is which message, and which bits form which signal. CAN tools like SavvyCAN load it to show the frames as readable values.
 
 You will load a trace of the bus from a correctly written Q1, then write a `.dbc` that decodes it. Download [SavvyCAN](https://www.savvycan.com/) for this.
 
