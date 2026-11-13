@@ -61,6 +61,23 @@ Read the dial and send the reading.
 - Keep the LED on `PIN_PD2` on while doing this.
     - `digitalWrite(PIN_NUM, HIGH);`
 
+#### Todo 4
+Make a heartbeat CAN frame that is sent every second.
+- Check the current time and compare it to the last time the the heartbeat fired.
+    - See manual section 6.2 for how to compare time properly.
+- If one second passed, fire the heartbeat.
+    - Reset the last fired time;
+    - Send the CAN frame.
+
+#### Todo 5
+Set the heartbeat CAN frame content value, then send it.
+- The CAN frame contains a `heartbeat_value`.
+    - Set `heartbeat_value` to 0.625 of `analog_value` with integer maths only.
+        - You can reference the manual section 6.1 for how to avoid floats.
+    - Would the operations cause an overflow?
+- Remember to send the frame out.
+
+
 ### Testing
 Make a PlatformIO project like in Homework 4.2, put `q1.cpp` in `src/`, and add the CAN library to `platformio.ini`:
 ```ini
