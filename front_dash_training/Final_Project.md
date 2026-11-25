@@ -14,6 +14,29 @@ This project has 5 parts.
 
 Some tasks use things we haven't covered in training, so they have a **Background** section that explains what you need. Every task that needs more than filling a blank has a **What to do** list. Finish the required tasks first.
 
+### Marks
+100 marks for the required work, plus up to 10 bonus for the advanced tasks.
+
+| Part | Task | Marks | How it's marked |
+|---|---|---|---|
+| 1 | Task 1 Pin map | 8 | Every pin right, written as names. A bare number is 0 for that line |
+| 1 | Task 2 Formatting | 4 | Checks pass (3), `answers.md` explanation (1) |
+| 1 | Task 3 Throttle | 4 | Checks pass (3), `answers.md` explanation (1) |
+| 1 | Task 4 Log decoder | 10 | Self-check passes (6), handles partial and corrupt records by its own logic (4) |
+| 2 | Task 5 Stale data | 6 | Checks pass (2), `answers.md` explanation with the hint numbers (4) |
+| 2 | Task 7 Status page | 12 | Positions (3), padding (3), priority order (2), `N/A` when stale (2), no state changed in `update()` (2) |
+| 3 | Task 8 Motor frame | 5 | Checks pass |
+| 3 | Task 9 Pedal frame | 10 | Checks pass (8), readable: masks and shifts (2) |
+| 4 | Task 10 Odometer | 11 | `newestSlot` checks pass (4), `loadOdometer` (4), `saveOdometer` (3) |
+| 5 | Task 12 Radio | 15 | Design table, shown to me before the code (5), firmware and timing (5), ground station (5) |
+| | Questions | 10 | 2 per answer: says what *and* why, tied to the code |
+| | Process | 5 | One commit per task with the given messages, Trainee blocks filled in |
+| | **Total** | **100** | |
+| 2 | Task 6 Encoder (advanced) | +5 | Checks pass |
+| 4 | Task 11 SD logger (advanced) | +5 | Read against the steps |
+
+"Checks pass" means the checks in this repo **and** hidden test cases I run when grading. Passing the checks you can see doesn't guarantee full marks. Write code that's right for every input, not code that only passes the given cases.
+
 ***The specs in this project are not the same as the car's.*** Frame layouts, display formats, the log format and the EEPROM layout are all changed. Code copied from the race firmware does not pass the checks. Work from the comments in these files.
 
 Create a repo called `rbr-sf-front-dash`, copy this project into it, finish the tasks, then send the link on the [training website](https://rbrevrt.hkust.edu.hk/training). Use what you learnt in Homework 2: commit as you go, I ***WILL*** check your commit history :D.
@@ -79,7 +102,7 @@ Read these files in this order. Every task assumes you know them. Each has one t
 4. `include/DashState.hpp`: how the VCU packs its CAN frames. Find out: what `car.pedal.status.bits.hv_ready` is. (`status` is a union: the same byte, read either as a whole `byte` or as single named `bits`.)
 
 ## Part 1
-### Task 1: Pin map
+### Task 1: Pin map (8 marks)
 `include/pinMap.h` is the dash's `board.h`, like in Homework 4.2. Every pin is already listed as an empty `#define`. Read the schematic below: each net label (e.g. `CAN1_CS`) sits next to the ATmega328PA port pin it is wired to. Fill in the value of each `#define`. `CAN0_CS` is done for you as an example:
 ```cpp
 #define CAN0_CS        PIN_PD5 // example follow this format of using PIN_PXY or marks would be deducted
@@ -98,7 +121,7 @@ Notes:
 
 Commit with the message `Fill in pin map`.
 
-### Task 2: Formatting
+### Task 2: Formatting (4 marks)
 Tasks 2, 3 and 5 are fill in the blanks. The code in `lib/Pages/Page.tpp` is written for you, with 6 blanks: one per function. Each `BLANK` is a missing value, and `BLANK_TYPE` is a missing type. The line next to each blank does the same thing, so copy its pattern. When all three tasks are done, delete the two `#define BLANK` lines at the top of the file. If you missed a blank, the build now fails and tells you where.
 
 For this task, fill in the blanks in `hexNibble`, `formatHexByte`, `formatSignedInt2` and `formatFixedPoint2`.
@@ -115,7 +138,7 @@ The temperature clamps to ±99 because the BMS sends an `int8_t`. Without the cl
 
 Check: `CHECK_TASK_2`. In `answers.md`, explain why `hexNibble` uses `'A' + n - 10`. Commit with the message `Formatting helpers`.
 
-### Task 3: Throttle
+### Task 3: Throttle (4 marks)
 Fill in the one blank in `throttlePercent()`: the type. The sensor reads 0.5 V to 4.5 V, and the bottom and top 3 % snap to 0 / 100 so a resting foot doesn't show 1 %.
 
 #### Background
@@ -123,7 +146,7 @@ On the AVR, `int` is only 16 bits, so it holds up to 32 767. C++ does arithmetic
 
 Check: `CHECK_TASK_3`. In `answers.md`, explain why `uint16_t` gives a wrong answer here. Commit with the message `Throttle percentage`.
 
-### Task 4: Log decoder
+### Task 4: Log decoder (10 marks)
 The dash logs every CAN frame to the SD card as binary records. Implement `decode()` in `tools/decode_log.py`. The steps are in the comment inside it.
 
 #### Background
@@ -141,14 +164,14 @@ The record layout is also written at the top of `lib/SD_buffer/SD.hpp`.
 Check: `python3 tools/decode_log.py` prints `self-check ok`. Commit with the message `Log decoder`.
 
 ## Part 2: Embedded basics
-### Task 5: Stale data
+### Task 5: Stale data (6 marks)
 Fill in the blank in `isStale()`. The compiler warns you which parameter is unused. The pages use it through `stale()` to show `--` when a CAN source goes quiet.
 
 `millis()` wraps back to 0 after 49.7 days. The subtraction is still right across the wrap, but `now > last + timeout` is not. Explain why in `answers.md`. (Hint: try `last = 4 294 967 000`, `now = 100`, `timeout = 500` both ways, remembering that a `uint32_t` wraps at 4 294 967 296.)
 
 Check: `CHECK_TASK_5`. (bench) Unplug the CAN bus: every page shows `--` / `N/A` within 0.5 s, and BMS within 2.5 s. Commit with the message `Stale data timeout`.
 
-### Task 6: Encoder (advanced, optional)
+### Task 6: Encoder (advanced, optional, +5 bonus)
 Fill in `ENC_STEP[16]` in `src/main.cpp`. The comment above it explains the index and the direction. Draw the 4 states of the 2 pins in a circle first.
 
 #### Background
@@ -167,7 +190,7 @@ Fill in `ENC_STEP[16]` in `src/main.cpp`. The comment above it explains the inde
 
 Check: `CHECK_TASK_6`. (bench) One click of the knob moves one page, both ways. Commit with the message `Encoder table`.
 
-### Task 7: Status page
+### Task 7: Status page (12 marks)
 Finish `DefaultPage::update()` in `lib/Pages/DefaultPage.tpp`. The layout is in the comment above it, items 0 and 1 are done for you, and each of items 2, 3 and 4 has a comment saying what to print.
 
 #### Background
@@ -183,7 +206,7 @@ For each of items 2, 3 and 4: copy the shape of item 0. Call `setCursorQueued()`
 There is no check for this one. Read your code against the layout carefully. (bench) With no VCU plugged in, the page shows `N/A`, and fields never flicker. Commit with the message `Status page`.
 
 ## Part 3: CAN
-### Task 8: Motor frame
+### Task 8: Motor frame (5 marks)
 Finish `unpackMotor()` in `include/DashState.hpp`. `motor_rpm` is done for you as an example.
 
 #### Background
@@ -195,7 +218,7 @@ The VCU packs each 16-bit value into 2 bytes, big-endian: the high byte first. T
 
 Check: `CHECK_TASK_8`. It packs test values with `fromCanFrame()` and checks that your function gives them back. Commit with the message `Unpack motor frame`.
 
-### Task 9: Pedal frame
+### Task 9: Pedal frame (10 marks)
 Finish `unpackPedal()` in `include/DashState.hpp`. `status`, `faults` and `brake` are done for you. It's the exact reverse of `TelemetryFramePedal::fromCanFrame()` just above it: four 10-bit fields in one 40-bit big-endian number. Here is where every bit is:
 ```
 data[2]   data[3]   data[4]   data[5]   data[6]
@@ -225,7 +248,7 @@ For example, `apps_5v` is the low 6 bits of `data[3]` (they become its bits 9 to
 Check: `CHECK_TASK_9`. Commit with the message `Unpack pedal frame`.
 
 ## Part 4: Reliability
-### Task 10: Odometer
+### Task 10: Odometer (11 marks)
 Implement `newestSlot()` and `saveOdometer()`, and fill in the blanks in `loadOdometer()`, all in `src/main.cpp`. `odoCrc()` is done for you. Each function has numbered steps in its comment. Saves rotate through **3** EEPROM slots.
 
 #### Background
@@ -246,7 +269,7 @@ saveOdometer(odometer_integral);
 ```
 Turn the power off and on 4 times. The odometer on the driver page shows `1.00000`, `2.00000`, `3.00000`, `4.00000` km: each boot loads the last value and saves 1 km more, and the slots wrap. Don't flash between power cycles: flashing usually erases the EEPROM too (unless the chip's EESAVE fuse is set). Remove the 2 lines when you're done. Commit with the message `Odometer in EEPROM`.
 
-### Task 11: SD logger (advanced, optional)
+### Task 11: SD logger (advanced, optional, +5 bonus)
 Implement `SdLogger::log()` and `SdLogger::service()` in `lib/SD_buffer/SD.hpp`. `writeBuf()` and `flushAll()` are done for you. Each function has numbered steps in its comment.
 
 #### Background
@@ -259,7 +282,7 @@ Implement `SdLogger::log()` and `SdLogger::service()` in `lib/SD_buffer/SD.hpp`.
 There is no check for this one. (bench) Log for 5 minutes, then decode the file with your Task 4 script. The DLCs are right, timestamps only go up, and there are no big gaps. Commit with the message `SD double buffer`.
 
 ## Part 5: Design
-### Task 12: Radio
+### Task 12: Radio (15 marks)
 The dash sends telemetry to the pit over an HC-12 radio. `lib/Radio/` already builds the frames and sends them. You decide what goes in them, fill them in, send them at a fixed rate, and write the ground station program that reads them. This has no single right answer, so bring your design to me ***before*** you write the code.
 
 #### Background
@@ -277,7 +300,7 @@ The dash sends telemetry to the pit over an HC-12 radio. `lib/Radio/` already bu
 
 Check: `python3 tools/ground_station.py` prints `self-check ok`, and the project builds. Commit with the message `Radio telemetry`, then push.
 
-## Questions
+## Questions (10 marks)
 Answer these in `answers.md`, in no less than 2 sentences each.
 1. `Page::update()` must not change any state. Why? Hint: find `beginDryRun` in `main.cpp`.
 2. What does the watchdog (`wdt_enable`) protect against? What happens if a page's `update()` takes 1.2 s?
