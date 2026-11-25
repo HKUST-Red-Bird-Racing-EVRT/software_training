@@ -9,7 +9,10 @@ This project has 5 parts.
 - Part 4: Reliability: saving the odometer, logging to the SD card (advanced).
 - Part 5: Design: radio telemetry.
 
-**Required:** Tasks 1 to 5, 7 to 10, and 12. **Advanced (optional):** Tasks 6 and 11. Some tasks use things we haven't covered in training, so they have a **Background** section that explains what you need. Every task that needs more than filling a blank has a **What to do** list. Finish the required tasks first.
+**Required:** Tasks 1 to 5, 7 to 10, and 12. 
+**Advanced (optional):** Tasks 6 and 11. 
+
+Some tasks use things we haven't covered in training, so they have a **Background** section that explains what you need. Every task that needs more than filling a blank has a **What to do** list. Finish the required tasks first.
 
 ***The specs in this project are not the same as the car's.*** Frame layouts, display formats, the log format and the EEPROM layout are all changed. Code copied from the race firmware does not pass the checks. Work from the comments in these files.
 
@@ -29,7 +32,7 @@ rbr-sf-front-dash/
 ```
 
 ### Files you edit
-Only edit the files with a `PROJECT TODO` in them, plus `answers.md`. Find the TODOs with this command, or search each file with Ctrl + F:
+Only edit the files with a `PROJECT TODO` in them, plus `answers.md`. Find the TODOs with the following command, or search each file with Ctrl + F:
 ```
 grep -rn "PROJECT TODO" include lib src tools
 ```
@@ -60,13 +63,13 @@ Then build. A wrong answer fails the build and says which case is wrong:
 ```
 static assertion failed: Task 2: formatSignedInt2(7) should be "+07"
 ```
-If you see `non-constant condition for static assertion` instead, the error just above it says what's wrong (often a variable without a starting value, see Task 10). Don't edit the tests to make them pass since I will run them myselves with "Hidden test cases :D". Leave every check you've passed on `1` when you submit.
+If you see `non-constant condition for static assertion` instead, the error just above it says what's wrong (often a variable without a starting value, see Task 10). Don't edit the tests to make them pass since I will run them myselves with a few "Hidden test cases :D" ~~haha I love cse inspiration~~. Leave every check you've passed on `1` when you submit.
 
 ### Python
 Tasks 1, 4 and 12 have Python scripts. Run them with `python3 tools/check_pinmap.py`, `python3 tools/decode_log.py` and `python3 tools/ground_station.py`. On Windows, type `py` instead of `python3`.
 
 ### Hardware
-You don't need a pcb to finish this project. The `(bench)` steps are optional, for when you have one on the bench.
+You don't need a pcb to finish this project. The `(bench)` steps are optional, for when the actual pcb is available for testing.
 
 ## Before you start
 Read these files in this order. Every task assumes you know them. Each has one thing to find out.
@@ -288,7 +291,7 @@ Answer these in `answers.md`, in no less than 2 sentences each.
 - Do the required tasks in order. Later ones use the earlier ones. Start the advanced tasks only when the required ones are done.
 - Read the code around your task before writing anything. The **What to do** steps and the comments in the code tell you what to write.
 - Compile and test your code, and fix the warnings.
-- Avoid using AI tools directly, since it is eliminating thinking from your working process. You can use it to help you think, but don't ask it to solve the questions for you.
+- Avoid using AI tools directly, since it is eliminating thinking from your working process. You can use it to help you think i.e understand structure of code, understand Bits/Bytes, understand workflow, what you need to achieve at certain parts, but don't ask it to solve the questions for you. If you encounter any problems feel free to message in the group or find me through whatsapp.
 
 ## Checklist
 - [ ] Read the entire instructions file
