@@ -9,11 +9,14 @@
  *     Send the reading over CAN.
  * While this happens, make an LED turn on to indicate activity.
  *     This LED is connected to PIN_PD2.
+ * 
+ * A separate "heartbeat" CAN frame is sent every second, with a value of 0.625 of the analog reading.
+ * 
  * The CAN frames are received and sent via an MCP2515 CAN controller.
  *     It is connected via SPI with CS on PIN_PB2.
  *     The crystal is 20MHz and the CAN speed is 500kbps.
- * @version 1.0.0
- * @date 2026-11-12
+ * @version 1.1.0
+ * @date 2026-11-13
  *
  * @copyright Copyright (c) 2026 Red Bird Racing
  *
@@ -39,6 +42,8 @@
 // create MCP2515 object
 /* HOMEWORK TODO 1 */
 
+// make a variable to store the last time you fire the following "heartbeat" CAN frame
+/* HOMEWORK TODO 4 */
 void setup()
 {
     // set the pinMode on the input pin
@@ -53,7 +58,7 @@ void loop()
 {
     // create CAN frame objects
     // make one for receiving, another for transmitting
-    struct can_frame txFrame;
+    struct can_frame tx_frame;
     /* HOMEWORK TODO 2 */
 
     // check if a CAN frame is received
@@ -69,10 +74,10 @@ void loop()
             /* HOMEWORK TODO 3 */
 
             // prepare the CAN frame to send
-            txFrame.can_id = 0x690;                      // reply ID
-            txFrame.can_dlc = 2;                         // data length code
-            txFrame.data[0] = (analogValue >> 8) & 0xFF; // high byte
-            txFrame.data[1] = analogValue & 0xFF;        // low byte
+            tx_frame.can_id = 0x690;                      // reply ID
+            tx_frame.can_dlc = 2;                         // data length code
+            tx_frame.data[0] = (analog_value >> 8) & 0xFF; // high byte
+            tx_frame.data[1] = analog_value & 0xFF;        // low byte
 
             // send the CAN frame
             /* HOMEWORK TODO 3 */
@@ -80,5 +85,24 @@ void loop()
             // turn off the LED after sending
             /* HOMEWORK TODO 3 */
         }
+    }
+
+    // check if 1 second has passed since the last heartbeat frame was sent
+    if (/* HOMEWORK TODO 4 */)
+    {
+        // set the last heartbeat time to the current time
+        /* HOMEWORK TODO 4 */;
+
+        // set the heartbeat_value to 0.625 of analog_value, using ONLY integer math (no floating point)
+        /* HOMEWORK TODO 5 */;
+
+        // prepare the heartbeat CAN frame to send
+        tx_frame.can_id = 0x167;                         // heartbeat ID
+        tx_frame.can_dlc = 2;                            // data length code
+        tx_frame.data[0] = (heartbeat_value >> 8) & 0xFF; // high byte
+        tx_frame.data[1] = heartbeat_value & 0xFF;        // low byte
+
+        // send the heartbeat CAN frame
+        /* HOMEWORK TODO 5 */
     }
 }
